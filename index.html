@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tema 1</title>
+    <style>
+        footer{
+            border: 1px solid blue;
+        }
+        .textoRojo{
+            color:red;
+        }
+        .textoVerde{
+            color:green;
+        }
+    </style>
+</head>
+<body>
+    <form id="formulario">
+        <label>Primer numero</label><br/>
+        <input type="number" min="1" max="9" value="0" name="num1" required/><br/>
+        <label>Segundo numero</label><br/>
+        <input type="number" min="1" max="9" value="0" name="num2" required/><br/>
+        <label>Tercer numero</label><br/>
+        <input type="number" min="1" max="9" value="0" name="num3" required/><br/>
+        <label>Cuarto numero</label><br/>
+        <input type="number" min="1" max="9" value="0" name="num4" required/><br/>
+        <button type="submit" id="aceptar">Aceptar</button>
+        <button type="reset" id="reset">Reset</button><br/>
+    </form>
+    <div id="resultados">
+    </div>
+    <footer>
+        <p>Rodes Barreto</p>
+    </footer>
+    <script>
+        var formulario = document.getElementById("formulario");
+        var btnAceptar = document.getElementById("aceptar");
+        btnAceptar.addEventListener("click",function(event){
+            event.preventDefault();
+            var formData = new FormData(formulario);
+            formData.forEach((valor, key)=>{
+                var numero = Number.parseInt(valor);
+                if(Number.isNaN(numero) || numero<1 || numero>9){
+                    alert("Introduzca un valor numerico positivo y entero ( 1 hasta 9 )");
+                    document.getElementById("reset").click();
+                    return 0;
+                }
+                console.log(`La clave es ${key} y su valor es ${valor}`);
+            });
+            if(formData.get("num1") == 0){
+                return 0;
+            }else{
+                procesarResultados(formData);
+            }
+            
+        })
+        function procesarResultados(formulario){
+            var resultado = document.getElementById("resultados");
+            var numerosNombresInput = ["Primer Numero: ","Segundo Numero: ","Tercer Numero: ","Cuarto Numero: "];
+            resultado.innerHTML = "";
+            var numeroFormado = "";
+            numerosNombresInput.forEach((value,key,index)=>{
+                numeroFormado += formulario.get(`num${key+1}`);
+                var numeroText = document.createElement("p");
+                numeroText.classList.add("textoRojo");
+                var texto = document.createTextNode(value);
+                var spanNumeroValue = document.createElement("span");
+                spanNumeroValue.classList.add("textoVerde");
+                var numeroValueText = document.createTextNode(formulario.get(`num${key+1}`));
+                spanNumeroValue.append(numeroValueText);
+                numeroText.append(texto);
+                numeroText.append(spanNumeroValue);
+                resultado.append(numeroText);
+            });
+            numeroFormado = parseInt(numeroFormado);
+            var numeroText = document.createElement("p");
+            numeroText.classList.add("textoVerde");
+            var texto = document.createTextNode("El numero formado de 4 digitos es: ");
+            var spanNumeroValue = document.createElement("span");
+            spanNumeroValue.classList.add("textoRojo");
+            var numeroValueText = document.createTextNode(numeroFormado);
+            spanNumeroValue.append(numeroValueText);
+            numeroText.append(texto);
+            numeroText.append(spanNumeroValue);
+            resultado.append(numeroText);
+
+            if(numeroFormado % 2 == 0){
+                resultadoNodeElement(numeroFormado,2,resultado);
+            }else{
+                resultadoNodeElement(numeroFormado,7,resultado);
+            }
+        }
+
+
+        function resultadoNodeElement(numero,multiplo,resultado){
+            var numeroText = document.createElement("p");
+            numeroText.classList.add("textoVerde");
+            var texto = document.createTextNode("El nuevo numero es: ");
+            
+            var spanNumeroValue = document.createElement("span");
+            spanNumeroValue.classList.add("textoRojo");
+            var numeroValueText = document.createTextNode(numero);
+            spanNumeroValue.append(numeroValueText);
+            
+            var spanMultiploValue = document.createElement("span");
+            spanMultiploValue.classList.add("textoRojo");
+            var numeroValueText = document.createTextNode(multiplo);
+            spanMultiploValue.append(numeroValueText);
+
+            var spanResultadoValue = document.createElement("span");
+            spanResultadoValue.classList.add("textoRojo");
+            var numeroValueText = document.createTextNode(numero*multiplo);
+            spanResultadoValue.append(numeroValueText);
+
+            numeroText.append(texto);
+            numeroText.append(spanNumeroValue);
+            numeroText.append(document.createTextNode(" * "));
+            numeroText.append(spanMultiploValue);
+            numeroText.append(document.createTextNode(" = "));
+            numeroText.append(spanResultadoValue);
+            resultado.append(numeroText);
+        }
+    </script>
+</body>
+</html>
